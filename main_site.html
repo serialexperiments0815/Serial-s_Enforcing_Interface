@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enforcing Interface landing page</title>
+    <link rel="stylesheet" href="graphics.css">
+</head>
+<body>
+    <!-- Entire page divided into two via container-row class-->
+    <div style="flex-direction: row;
+    height: 100vh;
+    display: flex;">
+        <div class="block"></div>
+
+        <!-- Right half divided into two seperate columns-->
+        <div class="block">
+            <div class="container-column">
+                
+                <!-- Title of project -->
+                <div class="block_quarter">
+                    <div class="block_text"> 
+                        <h1> Welcome to the Interface </h1>
+                    </div>
+                </div>
+                
+                <!-- Seperate sub-columns for menu -->
+                <div class="block">
+                    <div class="container-column">
+                        <div class="block_text"><a href="catalog.php"> <h2>View Profiles</h2></a></div>
+                        <div class="block_text"><a href="profile_create.php">Create Profile</a></div>
+                        <div class="block_text"><a href="profile_change.php">Change Profile</a></div>
+                        <div class="block_text"><a href="profile_delete.php">Delete Profile</a></div>
+                        <div class="block_text"><a href="exiting.php">Exit</a></div>
+                        <div class="block"></div>
+                    </div>
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</body>
+</html>
