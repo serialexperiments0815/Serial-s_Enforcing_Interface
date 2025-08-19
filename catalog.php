@@ -105,13 +105,13 @@ while ($row = mysqli_fetch_object($result)) {
         <input type="submit" value="RETURN"/>
         </div>
         </form>
-        <form action="catalog.php" method="POST">
+        <!-- <form action="catalog.php" method="POST">
         <div style="padding: 5px;">
         <input type="hidden" name="valueSite" value="2"/>
         <input type="hidden" name="personID" value="<?php ECHO $personIdentification ?>"/>
         <input type="submit" value="CHANGE"/>
         </div>
-        </form>
+        </form> -->
         <form action="catalog.php" method="POST">
         <div style="padding: 5px;">
         <input type="hidden" name="valueSite" value="3"/>
@@ -209,11 +209,11 @@ while ($row = mysqli_fetch_object($result)) {
     <input type="submit" value="delete me" style="height: 4.5em; width: 10em; margin-left: 5em"/>
     </div>
     </form>
-    <form>    
+    <!-- <form>    
     <div>
     <input type="submit" value="change me" style="height: 4.5em; width: 10em; margin-left: 5em"/>
     </div>
-    </form>
+    </form> -->
 
     </div>
     <?php

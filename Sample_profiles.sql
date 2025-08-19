@@ -1,4 +1,0 @@
-USE serial_enforcing_interface_database;
-insert into person_summary(picture, first_name, last_name, middle_name, date_of_birth, state_of_residence) VALUES ('Images/John.png', 'John', 'Smith', NULL, DATE_SUB(SYSDATE(), INTERVAL 120 MONTH), 'California');
-insert into person_summary(picture, first_name, last_name, middle_name, date_of_birth, state_of_residence) VALUES ('Images/Jack.png', 'Jack', 'Park', NULL, DATE_SUB(SYSDATE(), INTERVAL 50 MONTH), 'Texas');
-insert into person_summary(picture, first_name, last_name, middle_name, date_of_birth, state_of_residence) VALUES ('Images/Gabrielle.png', 'Gabrielle', 'Adams', NULL, DATE_SUB(SYSDATE(), INTERVAL 250 MONTH), 'New York');

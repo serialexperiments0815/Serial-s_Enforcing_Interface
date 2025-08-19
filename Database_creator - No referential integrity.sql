@@ -16,20 +16,20 @@ CREATE TABLE IF NOT EXISTS person_summary (
     CONSTRAINT PRIMARY KEY (person_number)
 );
 
-CREATE TABLE IF NOT EXISTS criminal_summary (
-    person_number_criminal_summary int NOT NULL,
-    charges int NOT NULL,
-    convictions int NOT NULL,
-    outstanding_warrants int NOT NULL,
-    flight_risk varchar(3) NOT NULL
-);
+-- CREATE TABLE IF NOT EXISTS criminal_summary (
+--     person_number_criminal_summary int NOT NULL,
+--     charges int NOT NULL,
+--     convictions int NOT NULL,
+--     outstanding_warrants int NOT NULL,
+--     flight_risk varchar(3) NOT NULL
+-- );
 
-CREATE TABLE IF NOT EXISTS outstanding_warrants (
-    person_number_outstanding_warrants int NOT NULL,
-    date_issues date NOT NULL,
-    charge varchar(50) NOT NULL,
-    country_state varchar(20) NOT NULL
-);
+-- CREATE TABLE IF NOT EXISTS outstanding_warrants (
+--     person_number_outstanding_warrants int NOT NULL,
+--     date_issues date NOT NULL,
+--     charge varchar(50) NOT NULL,
+--     country_state varchar(20) NOT NULL
+-- );
 
 CREATE TABLE IF NOT EXISTS record_details (
     person_number_record_details int NOT NULL,
@@ -49,3 +49,8 @@ CREATE TABLE IF NOT EXISTS record_details (
     offense_location_county char(50),
     sentence_penalty varchar(100)
 );
+
+USE serial_enforcing_interface_database;
+insert into person_summary(picture, first_name, last_name, middle_name, date_of_birth, state_of_residence) VALUES ('Images/John.png', 'John', 'Smith', NULL, DATE_SUB(SYSDATE(), INTERVAL 120 MONTH), 'California');
+insert into person_summary(picture, first_name, last_name, middle_name, date_of_birth, state_of_residence) VALUES ('Images/Jack.png', 'Jack', 'Park', NULL, DATE_SUB(SYSDATE(), INTERVAL 50 MONTH), 'Texas');
+insert into person_summary(picture, first_name, last_name, middle_name, date_of_birth, state_of_residence) VALUES ('Images/Gabrielle.png', 'Gabrielle', 'Adams', NULL, DATE_SUB(SYSDATE(), INTERVAL 250 MONTH), 'New York');
