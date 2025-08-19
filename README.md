@@ -53,7 +53,7 @@ The project allows creating, viewing, updating, and deleting **person profiles**
 ├── intermediary.json        # Temporary JSON storage for profile data
 ├── graphics.css             # Styling
 ├── database_connection.txt  # DB connection details (host, user, password, db)
-└── sql_setup.sql            # Schema & initial inserts
+└── Database_creator.sql            # Schema & initial inserts
 ```
 
 ---
