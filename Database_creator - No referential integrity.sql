@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS outstanding_warrants (
 
 CREATE TABLE IF NOT EXISTS record_details (
     person_number_record_details int NOT NULL,
+    record_number int primary key AUTO_INCREMENT NOT NULL, 
     offense_date date NOT NULL,
     offense varchar(200) NOT NULL,
     disposition_outcome varchar(200) NOT NULL,

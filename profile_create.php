@@ -4,7 +4,10 @@ $valueSite = $_POST['valueSite'] ?? null;
 
 // Json file declaration/initialisation
 $json = file_get_contents('intermediary.json');
+
 $profileData = json_decode($json, true);
+
+
 
 
 
@@ -66,20 +69,7 @@ function renderOffenseLocationStreetType()  {
 }
 }
 
-function renderProfileDisplay($profileData) {
-
-    echo    '<img src="Images/', htmlspecialchars(basename($profileData['picture'])),'"></img> <br>';
-    echo    '        <div class="block_image_text">';
-    echo    '            <p> FIRST NAME: </p>', $profileData['firstname'],' <br>';
-    echo    '            <p> MIDDLE NAME: </p>', $profileData['middlename'],' <br>';
-    echo    '            <p> LAST NAME: </p>', $profileData['lastname'],' <br>';
-    echo    '            <p> DATE OF BIRTH: </p>', $profileData['dateofbirth'],' <br>';
-    echo    '            <p> STATE OF RESIDENCE: </p>', $profileData['stateofresidence'];
-    echo    '        </div>';
-
-}
-
-
+// FIRST SITE INSTANCE ON ENTRY
 if ($valueSite == null) {
     
     $profileData = [
@@ -89,13 +79,14 @@ if ($valueSite == null) {
         "lastname" => "",
         "dateofbirth" => "",
         "stateofresidence" => "",
-        "criminalrecord" => "[]"
+        "criminalrecord" => "[]",
+        "updateorcreate" => "create"
     ];
 
     $updateData = json_encode($profileData, JSON_PRETTY_PRINT);
     file_put_contents("intermediary.json", $updateData);
 
-ECHO '
+?>
 <html>
 
 <head>
@@ -123,7 +114,8 @@ ECHO '
                     <input name="date_of_birth" type="date">
                     <p>State of residence:</p>
                     <select name="state_of_residence">
-                '; 
+                <?php
+                
                         $state_of_residence = [
                         'ALABAMA', 'ALASKA', 'ARIZONA', 'ARKANSAS', 'CALIFORNIA',
                         'COLORADO', 'CONNECTICUT', 'DELAWARE', 'FLORIDA', 'GEORGIA',
@@ -139,7 +131,7 @@ ECHO '
                         foreach ($state_of_residence as $state){
                             ECHO "<option value=\"{$state}\">{$state}</option>\n ";
                         };
-                    ECHO '   
+                ?>   
                     </select>
                     <br>
                     <input type="hidden" name="valueSite" value="1">
@@ -150,12 +142,34 @@ ECHO '
 </body>
 
 </html>
-';
+<?php
 }
 
+// SECOND SITE INSTANCE AFTER PROFILE CREATION
 if ($valueSite == "1") {
 
+
+    if (isSet($_POST["person_picture"])){
+    ECHO "isset person picture";
+    $profileData = [
+        "picture" => "",
+        "firstname" => "",
+        "middlename" => "",
+        "lastname" => "",
+        "dateofbirth" => "",
+        "stateofresidence" => "",
+        "criminalrecord" => "[]",
+        "updateorcreate" => "update"
+    ];
+
+    $updateData = json_encode($profileData, JSON_PRETTY_PRINT);
+    file_put_contents("intermediary.json", $updateData);
+    }
+
+
+    // IF JSON FILE EMPTY (CHECK FIRSTNAME EMTPY) ASSIGN DATA TO IT
     if ($profileData['firstname'] === "") {
+        if($profileData["updateorcreate"] == "create") {
     $var_person_picture = $_FILES['person_picture'];
     $var_first_name = $_POST['first_name'];
     $var_middle_name = $_POST['middle_name'];
@@ -173,12 +187,29 @@ if ($valueSite == "1") {
         "lastname" => $var_last_name,
         "dateofbirth" => $var_date_of_birth,
         "stateofresidence" => $var_state_of_residence,
+        "updateorcreate" => "create",
         "criminalrecord" => []
     ];
 
     $updateData = json_encode($profileData, JSON_PRETTY_PRINT);
     file_put_contents("intermediary.json", $updateData);
+    } else {
+        $profileData = [
+        "person_number" => $_POST['person_number'],
+        "picture" => $_POST['person_picture'],
+        "firstname" =>  $_POST['first_name'],
+        "middlename" => $_POST['middle_name'],
+        "lastname" => $_POST['last_name'],
+        "dateofbirth" => $_POST['date_of_birth'],
+        "stateofresidence" => $_POST['state_of_residence'],
+        "updateorcreate" => "update",
+        "criminalrecord" => []
+    ];
+    
+    $updateData = json_encode($profileData, JSON_PRETTY_PRINT);
+    file_put_contents("intermediary.json", $updateData);
     }
+}
 
 
 if (isset($_POST['criminalEntry']))
@@ -208,8 +239,98 @@ if (isset($_POST["clearSession"])) {
     file_put_contents("intermediary.json", $updateData);
 }
 
+function renderAll($profileData){
+?>
+<html>
 
-function renderCriminalRecordEntries($profileData){
+<head>
+    <title>Criminal Profile</title>
+    <link rel="stylesheet" href="graphics.css">
+</head>
+
+<body>
+    <div class="block_text">
+            <h1>Create a profile</h1>
+    </div>
+    <div style="display: flex; flex-direction: row;
+    height: 100vh;">
+        <div class="container-column">
+            <div class="block_image_text">
+        </div>
+
+    <img src="Images/<?php ECHO htmlspecialchars(basename($profileData['picture'])) ?>"></img> <br>
+            <div class="block_image_text">
+                <p> FIRST NAME: </p><?php ECHO $profileData['firstname'] ?> <br>
+                <p> MIDDLE NAME: </p><?php ECHO $profileData['middlename'] ?> <br>
+                <p> LAST NAME: </p><?php ECHO $profileData['lastname'] ?> <br>
+                <p> DATE OF BIRTH: </p><?php ECHO $profileData['dateofbirth'] ?> <br>
+                <p> STATE OF RESIDENCE: </p><?php ECHO $profileData['stateofresidence'] ?>
+            </div>
+
+    </div>
+        <div class="block_image_text">
+            <h1>Add criminal record entry</h1> <br>
+            <form action="profile_create.php" method="POST">
+<h2>Date of offense</h2><input name="offense_date" type="date"><br><br>
+<h2>Type of offense</h2>
+<select name="type_of_offense">
+<?php
+renderOffenseTypeOption();
+?>
+</select><br><br>
+<h2>Disposition outcome</h2>
+<select name="disposition_outcome">
+<?php
+renderDispositionOutcomes();
+?>
+</select><br><br>
+<div class="container-column-group">
+<h2>Location of offense</h2>
+Precisation of location
+<select name="offense_location_prefix">
+<option value="at">AT</option>
+<option value="in">IN</option>
+<option value="near">NEAR</option>
+</select><br>
+street number
+<input name="offense_location_street_number" type="number"><br>
+street name
+<input name="offense_location_street_name" type="text"><br>
+street type
+<select name="offense_location_street_type">
+<?php
+renderOffenseLocationStreetType();
+?>
+</select><br>
+street unit (optional)
+<input name="offense_location_unit"><br>
+city
+<input name="offense_location_city"><br>
+state
+<select name="offense_location_state">
+<?php
+renderOffenseLocationState();
+?>
+</select><br>
+zip code (optional)
+<input name="offense_location_zip_code" type="number"><br>
+county (optional)
+<input name="offense_location_county" type="text"><br>
+<div>
+<br>
+<input type="hidden" name="valueSite" value="1">
+<br>
+<input type="submit" name="criminalEntry" value="Add Entry">
+</div>
+</div>
+
+</form>
+</div>
+<div class="block_image_text">
+<h1>Criminal record entries</h1> <br>
+
+<!-- CRIMINAL RECORD ENTRIES GET THROUGH JSON -->
+<?php
     if ($profileData['criminalrecord'] != []){
         ECHO 'criminal record entries ('.count($profileData['criminalrecord'])." total)";
         
@@ -236,96 +357,10 @@ function renderCriminalRecordEntries($profileData){
       else {
         ECHO 'No criminal record entries exist';
     }
-}
-
-function renderAll($profileData){
-    ECHO ' 
-<html>
-
-<head>
-    <title>Criminal Profile</title>
-    <link rel="stylesheet" href="graphics.css">
-</head>
-
-<body>
-    <div class="block_text">
-            <h1>Create a profile</h1>
-    </div>
-    <div style="display: flex; flex-direction: row;
-    height: 100vh;">
-        <div class="container-column">
-            <div class="block_image_text">
-        </div>
-';
-renderProfileDisplay($profileData);
-ECHO 
-'
-    </div>
-        <div class="block_image_text">
-            <h1>Add criminal record entry</h1> <br>
-            <form action="profile_create.php" method="POST">
-<h2>Date of offense</h2><input name="offense_date" type="date"><br><br>
-<h2>Type of offense</h2>
-<select name="type_of_offense">';
-renderOffenseTypeOption();
-ECHO '
-</select><br><br>
-<h2>Disposition outcome</h2>
-<select name="disposition_outcome">
-';
-renderDispositionOutcomes();
-ECHO '
-</select><br><br>
-<div class="container-column-group">
-<h2>Location of offense</h2>
-Precisation of location
-<select name="offense_location_prefix">
-<option value="at">AT</option>
-<option value="in">IN</option>
-<option value="near">NEAR</option>
-</select><br>
-street number
-<input name="offense_location_street_number" type="number"><br>
-street name
-<input name="offense_location_street_name" type="text"><br>
-street type
-<select name="offense_location_street_type">
-';
-renderOffenseLocationStreetType();
-ECHO '
-</select><br>
-street unit (optional)
-<input name="offense_location_unit"><br>
-city
-<input name="offense_location_city"><br>
-state
-<select name="offense_location_state">
-';
-renderOffenseLocationState();
-ECHO '
-</select><br>
-zip code (optional)
-<input name="offense_location_zip_code" type="number"><br>
-county (optional)
-<input name="offense_location_county" type="text"><br>
-<div>
-<br>
-<input type="hidden" name="valueSite" value="1">
-<br>
-<input type="submit" name="criminalEntry" value="Add Entry">
-</div>
-</div>
-
-</form>
-</div>
-<div class="block_image_text">
-<h1>Criminal record entries</h1> <br>
-
-';
-renderCriminalRecordEntries($profileData);
-ECHO '
+?>
 <br><br>
 
+<!-- BUTTON FOR CREATION OF PROFILE OR CLEARING OF ENTRIES -->
 <form action="profile_create.php" method="POST"><br><br>
 <input type="hidden" name="valueSite" value="1">
 <input type="submit" name="clearSession" value="CLEAR CRIMINAL RECORD">
@@ -334,11 +369,14 @@ ECHO '
 <input type="hidden" name="valueSite" value="2">
 <input type="submit" name="finishProfileCreation" value="FINISH CRIMINAL RECORD CREATION"><br><br>
 </form>
+
+
 </div>
 </form>
 </div>
 </body>
-</html>';
+</html>
+<?php
 }
 
 renderAll($profileData);
@@ -347,6 +385,8 @@ renderAll($profileData);
 if ($valueSite == "2") {
     include "database_connection.txt";
     $conn = mysqli_connect($host, $user, $password, $db) or die("Connection has failed");
+    
+    if ($profileData["updateorcreate"] == "create"){
     $query = "insert into person_summary values (NULL, '{$profileData["picture"]}', '{$profileData["firstname"]}','{$profileData["lastname"]}', '{$profileData["middlename"]}', '{$profileData["dateofbirth"]}', '{$profileData["stateofresidence"]}')";
     
     $result = mysqli_query($conn, $query) or die("query failed");
@@ -355,7 +395,30 @@ if ($valueSite == "2") {
 
     foreach ($profileData["criminalrecord"] as $entry) {
     $query = "insert into record_details values (
-    '{$person_number}', 
+    '{$person_number}',
+    'NULL', 
+    '{$entry["offensedate"]}', 
+    '{$entry["typeofoffense"]}', 
+    '{$entry["dispositionoutcome"]}', 
+    '{$entry["offenselocationprefix"]}', 
+    '{$entry["offenselocationstreetnumber"]}', 
+    '{$entry["offenselocationstreetname"]}', 
+    '{$entry["offenselocationstreettype"]}', 
+    '{$entry["offenselocationunit"]}', 
+    '{$entry["offenselocationcity"]}', 
+    '{$entry["offenselocationstate"]}', 
+    '{$entry["offenselocationzipcode"]}', 
+    '{$entry["offenselocationcounty"]}',
+    NULL)";
+     mysqli_query($conn, $query) or die("query failed");
+    }
+} else {
+    $person_number = $profileData["person_number"];
+
+    foreach ($profileData["criminalrecord"] as $entry) {
+    $query = "insert into record_details values (
+    '{$person_number}',
+    'NULL', 
     '{$entry["offensedate"]}', 
     '{$entry["typeofoffense"]}', 
     '{$entry["dispositionoutcome"]}', 
@@ -380,16 +443,19 @@ if ($valueSite == "2") {
         "lastname" => "",
         "dateofbirth" => "",
         "stateofresidence" => "",
+        "updateorcreate" => "",
         "criminalrecord" => "[]"
     ];
 
     $updateData = json_encode($profileData, JSON_PRETTY_PRINT);
     file_put_contents("intermediary.json", $updateData);
+}
 
-
-    ECHO "There seem to have been no issues with the profile creation.";
-    ECHO '<form action="main_site.html">';
-    ECHO '<input type="submit" value="Return to main page"/>';
-    ECHO '</form>';
+    ?>
+    <p>There seem to have been no issues with the profile creation.</p>
+    <form action="main_site.html">
+    <input type="submit" value="Return to main page"/>
+    </form>
+<?php
 }
 ?>
