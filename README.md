@@ -88,7 +88,7 @@ The project allows creating, viewing, updating, and deleting **person profiles**
 
 1. **Setup the database**
    ```sql
-   SOURCE sql_setup.sql;
+   SOURCE database_creator.sql;
    ```
 
 2. **Configure DB connection**  
