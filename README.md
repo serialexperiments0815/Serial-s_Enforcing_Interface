@@ -112,15 +112,6 @@ The project allows creating, viewing, updating, and deleting **person profiles**
 
 ---
 
-## 📸 Screenshots
-
-- **Landing Page** → Navigate between catalog, creation, or exit.  
-- **Profile Catalog** → View all existing profiles with images and names.  
-- **Profile Summary** → Full details + offenses with expandable `<details>`.  
-- **Profile Creation** → Upload picture, input data, add offenses, commit to DB.  
-
----
-
 ## ⚠️ Notes
 - Profile pictures are AI-generated using thispersondoesnotexist.com.
 - This project is **educational** and not intended for production use.  
