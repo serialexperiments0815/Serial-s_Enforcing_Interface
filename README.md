@@ -122,7 +122,7 @@ The project allows creating, viewing, updating, and deleting **person profiles**
 ---
 
 ## ⚠️ Notes
-
+- Profile pictures are AI-generated using thispersondoesnotexist.com.
 - This project is **educational** and not intended for production use.  
 - No authentication layer is implemented (all operations are public).  
 - SQL queries are **not parameterized** → vulnerable to SQL injection (should be updated with prepared statements).  
